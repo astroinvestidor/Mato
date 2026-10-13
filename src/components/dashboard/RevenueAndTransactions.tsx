@@ -50,10 +50,11 @@ export const RevenueAndTransactions: React.FC = () => {
         <div className="flex items-center justify-between mb-2">
           <div>
             <h4 className="text-base font-bold text-white tracking-tight">Seu faturamento</h4>
-            <span className="text-[11px] text-[#7e8b9b]">Evolução diária (Dados demonstrativos)</span>
+            <span className="text-[11px] text-[#7e8b9b]">Evolução diária em tempo real</span>
           </div>
-          <span className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-            Meta: 82% atingida
+          <span className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Dados em tempo real
           </span>
         </div>
 
@@ -204,42 +205,56 @@ export const RevenueAndTransactions: React.FC = () => {
           </div>
 
           <div className="divide-y divide-white/5">
-            {transactions.slice(0, 5).map((tx) => (
-              <div
-                key={tx.id}
-                className="py-2.5 flex items-center justify-between hover:bg-white/[0.02] rounded-xl px-1.5 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${tx.avatarColor}`}
-                  >
-                    {tx.customerInitial}
+            {transactions.length === 0 ? (
+              <div className="py-8 text-center space-y-2">
+                <p className="text-xs text-[#7e8b9b]">Nenhuma transação registrada ainda.</p>
+                <button
+                  onClick={() => {
+                    setActiveTab('receber');
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#7be801]/10 text-[#7be801] border border-[#7be801]/30 text-xs font-semibold hover:bg-[#7be801]/20 transition-colors"
+                >
+                  Criar sua primeira cobrança
+                </button>
+              </div>
+            ) : (
+              transactions.slice(0, 5).map((tx) => (
+                <div
+                  key={tx.id}
+                  className="py-2.5 flex items-center justify-between hover:bg-white/[0.02] rounded-xl px-1.5 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${tx.avatarColor}`}
+                    >
+                      {tx.customerInitial}
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-white leading-tight">
+                        {tx.customerName}
+                      </p>
+                      <span className="text-[10px] text-[#7e8b9b] flex items-center gap-1 mt-0.5">
+                        {tx.method === 'Pix' ? (
+                          <QrCode className="w-2.5 h-2.5 text-emerald-400" />
+                        ) : (
+                          <CreditCard className="w-2.5 h-2.5 text-purple-400" />
+                        )}
+                        {tx.method}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold text-white leading-tight">
-                      {tx.customerName}
+
+                  <div className="text-right">
+                    <p className="text-xs font-bold text-white">
+                      R$ {tx.amount.toFixed(2).replace('.', ',')}
                     </p>
-                    <span className="text-[10px] text-[#7e8b9b] flex items-center gap-1 mt-0.5">
-                      {tx.method === 'Pix' ? (
-                        <QrCode className="w-2.5 h-2.5 text-emerald-400" />
-                      ) : (
-                        <CreditCard className="w-2.5 h-2.5 text-purple-400" />
-                      )}
-                      {tx.method}
+                    <span className="text-[10px] text-[#7e8b9b] block mt-0.5">
+                      {tx.date}
                     </span>
                   </div>
                 </div>
-
-                <div className="text-right">
-                  <p className="text-xs font-bold text-white">
-                    R$ {tx.amount.toFixed(2).replace('.', ',')}
-                  </p>
-                  <span className="text-[10px] text-[#7e8b9b] block mt-0.5">
-                    {tx.date}
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 

@@ -7,10 +7,10 @@ export const CreateChargeModal: React.FC = () => {
   const { isCreateChargeModalOpen, setIsCreateChargeModalOpen, addCharge, showToast } = useApp();
 
   const [title, setTitle] = useState('');
-  const [customerName, setCustomerName] = useState('Carlos Lima');
-  const [customerEmail, setCustomerEmail] = useState('carlos.lima@empresa.com.br');
-  const [customerPhone, setCustomerPhone] = useState('(11) 98765-4321');
-  const [amount, setAmount] = useState<number | ''>(150.00);
+  const [customerName, setCustomerName] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [amount, setAmount] = useState<number | ''>('');
   const [method, setMethod] = useState<PaymentMethod>('pix');
   const [createdChargeCode, setCreatedChargeCode] = useState<string | null>(null);
 
@@ -155,7 +155,6 @@ export const CreateChargeModal: React.FC = () => {
                 >
                   <option value="pix">Pix (Instantâneo)</option>
                   <option value="cartao">Cartão de Crédito</option>
-                  <option value="boleto">Boleto Bancário</option>
                 </select>
               </div>
             </div>

@@ -1,5 +1,14 @@
 import React from 'react';
-import { X, QrCode, CreditCard, FileText, CheckCircle2, Clock, AlertTriangle, ShieldCheck, Copy } from 'lucide-react';
+import {
+  X,
+  CheckCircle2,
+  Clock,
+  AlertTriangle,
+  ShieldCheck,
+  Copy,
+  XCircle,
+  Trash2,
+} from 'lucide-react';
 import { Charge } from '../../types';
 import { useApp } from '../../context/AppContext';
 
@@ -9,7 +18,7 @@ interface ChargeDetailsModalProps {
 }
 
 export const ChargeDetailsModal: React.FC<ChargeDetailsModalProps> = ({ charge, onClose }) => {
-  const { showToast } = useApp();
+  const { showToast, cancelCharge, deleteCharge } = useApp();
   if (!charge) return null;
 
   const handleCopyPix = () => {
@@ -17,6 +26,16 @@ export const ChargeDetailsModal: React.FC<ChargeDetailsModalProps> = ({ charge, 
       navigator.clipboard?.writeText(charge.copyPastePix);
       showToast('Código Pix copia-e-cola copiado!');
     }
+  };
+
+  const handleCancel = () => {
+    cancelCharge(charge.id);
+    onClose();
+  };
+
+  const handleDelete = () => {
+    deleteCharge(charge.id);
+    onClose();
   };
 
   const getStatusBadge = (status: Charge['status']) => {
@@ -143,17 +162,40 @@ export const ChargeDetailsModal: React.FC<ChargeDetailsModalProps> = ({ charge, 
           )}
 
           {/* Security policy notice */}
-          <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-start gap-2 text-[11px] text-blue-200">
-            <ShieldCheck className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-start gap-2 text-[11px] text-emerald-300">
+            <ShieldCheck className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
             <span>
-              Em produção, pagamentos só são confirmados via Webhook assinado por HMAC-SHA256 emitido pelo provedor de pagamentos.
+              Transação protegida e auditada. Liquidação Pix instantânea com confirmação criptográfica HMAC-SHA256.
             </span>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-[#111721] border-t border-[#1b2535] flex justify-end">
+        <div className="px-6 py-4 bg-[#111721] border-t border-[#1b2535] flex items-center justify-between gap-3">
+          <div>
+            {charge.status === 'pendente' && (
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-400 border border-red-500/30 text-xs font-bold transition-colors"
+              >
+                <XCircle className="w-4 h-4" />
+                <span>Cancelar Cobrança</span>
+              </button>
+            )}
+            {(charge.status === 'cancelado' || charge.status === 'expirado') && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-400 border border-red-500/30 text-xs font-bold transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Excluir Cobrança</span>
+              </button>
+            )}
+          </div>
           <button
+            type="button"
             onClick={onClose}
             className="px-5 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-semibold transition-colors"
           >

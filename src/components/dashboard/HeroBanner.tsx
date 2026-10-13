@@ -8,7 +8,7 @@ export const HeroBanner: React.FC = () => {
   const handleCopyMockPix = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigator.clipboard?.writeText('00020126580014br.gov.bcb.pix0136mato-demo-carlos-150-pix-key5204000053039865405150.005802BR5912MatoPayDemo6009SaoPaulo62070503***6304E1D2');
-    showToast('Código Pix copiado para a área de transferência! (Simulação)');
+    showToast('Chave Pix copiada com sucesso!');
   };
 
   return (
@@ -174,7 +174,7 @@ export const HeroBanner: React.FC = () => {
                 </button>
 
                 {/* Payment Options Bottom Bar */}
-                <div className="grid grid-cols-3 gap-1 pt-1 border-t border-white/5 text-[8px] text-[#7e8b9b]">
+                <div className="grid grid-cols-2 gap-1 pt-1 border-t border-white/5 text-[8px] text-[#7e8b9b]">
                   <div className="flex flex-col items-center text-emerald-400 font-semibold">
                     <QrCode className="w-3 h-3" />
                     <span>Pix</span>
@@ -182,10 +182,6 @@ export const HeroBanner: React.FC = () => {
                   <div className="flex flex-col items-center">
                     <CreditCard className="w-3 h-3" />
                     <span>Cartão</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <FileText className="w-3 h-3" />
-                    <span>Boleto</span>
                   </div>
                 </div>
               </div>

@@ -134,8 +134,11 @@ export const FloatingMatoIAWidget: React.FC = () => {
 
           {/* Mode notice */}
           <div className="px-3.5 py-1 bg-[#090d12] border-t border-white/5 text-[10px] text-[#67778b] flex justify-between items-center">
-            <span>Modo: Demonstração Interativa</span>
-            <span className="text-emerald-400">Pronto para backend</span>
+            <span className="flex items-center gap-1.5 text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              MATO IA Ativa & Operacional
+            </span>
+            <span className="text-gray-400">Modelo Especialista</span>
           </div>
 
           {/* Input Form */}

@@ -15,10 +15,20 @@ import { AnalyticsView } from './components/analytics/AnalyticsView';
 import { SettingsView } from './components/settings/SettingsView';
 import { FloatingMatoIAWidget } from './components/dashboard/FloatingMatoIAWidget';
 import { ToastContainer } from './components/common/ToastContainer';
+import { AuthModal } from './components/auth/AuthModal';
 
 const MainAppContent: React.FC = () => {
-  const { activeTab } = useApp();
+  const { activeTab, isAuthenticated } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <AuthModal />
+        <ToastContainer />
+      </>
+    );
+  }
 
   const renderActiveView = () => {
     switch (activeTab) {
@@ -66,7 +76,7 @@ const MainAppContent: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <div className="relative z-10 flex-1 flex flex-col min-w-0 lg:pl-[260px]">
+      <div className="relative flex-1 flex flex-col min-w-0 lg:pl-[260px]">
         {/* Top Header */}
         <Header onMobileMenuToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
 

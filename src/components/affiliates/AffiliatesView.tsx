@@ -7,7 +7,7 @@ export const AffiliatesView: React.FC = () => {
   const { affiliates, showToast } = useApp();
 
   const handleCopyReferral = () => {
-    navigator.clipboard?.writeText('https://mato.digital/r/mateus-silva');
+    navigator.clipboard?.writeText('https://mato.app.br/afiliados');
     showToast('Link de convite do programa de afiliados copiado!');
   };
 
@@ -49,14 +49,18 @@ export const AffiliatesView: React.FC = () => {
         </div>
         <div className="p-4 rounded-2xl bg-[#0c1016] border border-[#1b2330]">
           <span className="text-xs font-medium text-[#7e8b9b]">Vendas por Indicação</span>
-          <p className="text-2xl font-black text-white mt-1">57 vendas</p>
+          <p className="text-2xl font-black text-white mt-1">
+            {affiliates.reduce((acc, a) => acc + a.salesCount, 0)} vendas
+          </p>
           <span className="text-[11px] text-[#7e8b9b] mt-1 inline-block">
             Taxa média de comissão: 15%
           </span>
         </div>
         <div className="p-4 rounded-2xl bg-[#0c1016] border border-[#1b2330]">
           <span className="text-xs font-medium text-[#7e8b9b]">Comissões Pagas</span>
-          <p className="text-2xl font-black text-emerald-400 mt-1">R$ 2.915,00</p>
+          <p className="text-2xl font-black text-emerald-400 mt-1">
+            R$ {affiliates.reduce((acc, a) => acc + a.commissionEarned, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </p>
           <span className="text-[11px] text-[#7e8b9b] mt-1 inline-block">
             Liquidado via Pix sem burocracia
           </span>

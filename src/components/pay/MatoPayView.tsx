@@ -6,13 +6,12 @@ import {
   CreditCard,
   FileText,
   Search,
-  Filter,
   CheckCircle2,
   Clock,
   AlertTriangle,
-  ArrowUpRight,
   Eye,
-  ShieldCheck,
+  XCircle,
+  Trash2,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { Charge, PaymentStatus } from '../../types';
@@ -21,7 +20,13 @@ import { CreateChargeModal } from './CreateChargeModal';
 import { ChargeDetailsModal } from './ChargeDetailsModal';
 
 export const MatoPayView: React.FC = () => {
-  const { charges, setIsCreateChargeModalOpen, setIsCreateLinkModalOpen } = useApp();
+  const {
+    charges,
+    cancelCharge,
+    deleteCharge,
+    setIsCreateChargeModalOpen,
+    setIsCreateLinkModalOpen,
+  } = useApp();
   const [selectedCharge, setSelectedCharge] = useState<Charge | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('todos');
@@ -35,6 +40,8 @@ export const MatoPayView: React.FC = () => {
     const matchesStatus = statusFilter === 'todos' || c.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  const activeCharges = charges.filter((c) => c.status !== 'cancelado');
 
   const getStatusBadge = (status: PaymentStatus) => {
     switch (status) {
@@ -108,9 +115,14 @@ export const MatoPayView: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 rounded-2xl bg-[#0c1016] border border-[#1b2330]">
           <span className="text-xs font-medium text-[#7e8b9b]">Volume Total Emitido</span>
-          <p className="text-2xl font-black text-white mt-1">R$ 13.454,20</p>
+          <p className="text-2xl font-black text-white mt-1">
+            R${' '}
+            {activeCharges
+              .reduce((acc, c) => acc + c.amount, 0)
+              .toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </p>
           <span className="text-[11px] text-emerald-400 font-semibold mt-1 inline-block">
-            +32% em relação ao mês anterior
+            {activeCharges.length} cobranças geradas
           </span>
         </div>
         <div className="p-4 rounded-2xl bg-[#0c1016] border border-[#1b2330]">
@@ -122,7 +134,7 @@ export const MatoPayView: React.FC = () => {
         </div>
         <div className="p-4 rounded-2xl bg-[#0c1016] border border-[#1b2330]">
           <span className="text-xs font-medium text-[#7e8b9b]">Cobranças Ativas</span>
-          <p className="text-2xl font-black text-white mt-1">{charges.length}</p>
+          <p className="text-2xl font-black text-white mt-1">{activeCharges.length}</p>
           <span className="text-[11px] text-amber-400 font-semibold mt-1 inline-block">
             {charges.filter((c) => c.status === 'pendente').length} aguardando liquidação
           </span>
@@ -143,7 +155,7 @@ export const MatoPayView: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 overflow-x-auto">
-          {['todos', 'pendente', 'pago', 'expirado'].map((status) => (
+          {['todos', 'pendente', 'pago', 'expirado', 'cancelado'].map((status) => (
             <button
               key={status}
               onClick={() => setStatusFilter(status)}
@@ -216,16 +228,47 @@ export const MatoPayView: React.FC = () => {
                     </td>
                     <td className="px-5 py-3.5">{getStatusBadge(charge.status)}</td>
                     <td className="px-5 py-3.5 text-right">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedCharge(charge);
-                        }}
-                        className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-colors"
-                        title="Ver detalhes"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
+                      <div className="inline-flex items-center justify-end gap-2">
+                        {charge.status === 'pendente' && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              cancelCharge(charge.id);
+                            }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-400 border border-red-500/30 text-[11px] font-bold transition-colors"
+                            title="Cancelar cobrança"
+                          >
+                            <XCircle className="w-3.5 h-3.5" />
+                            <span>Cancelar</span>
+                          </button>
+                        )}
+                        {(charge.status === 'cancelado' || charge.status === 'expirado') && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteCharge(charge.id);
+                            }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-[11px] font-semibold transition-colors"
+                            title="Excluir cobrança"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span>Excluir</span>
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedCharge(charge);
+                          }}
+                          className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-colors"
+                          title="Ver detalhes"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

@@ -79,7 +79,7 @@ export const MatoAIView: React.FC = () => {
           <div className="text-left">
             <span className="text-[10px] text-[#7e8b9b] uppercase font-bold tracking-wider block">Créditos de IA</span>
             <span className="text-xs font-bold text-white">
-              {userProfile.aiCreditsUsed} / {userProfile.aiCreditsTotal} utilizados
+              {userProfile?.aiCreditsUsed || 0} / {userProfile?.aiCreditsTotal || 50} utilizados
             </span>
           </div>
         </div>

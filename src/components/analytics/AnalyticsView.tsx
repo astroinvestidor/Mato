@@ -5,15 +5,25 @@ import { DemoBanner } from '../common/DemoBanner';
 import { revenueDataPoints } from '../../data/mockData';
 
 export const AnalyticsView: React.FC = () => {
-  const { sales, customers, transactions } = useApp();
+  const { sales, customers, transactions, charges } = useApp();
   const [period, setPeriod] = useState('7d');
 
-  // Exact calculations based on actual mock data
+  // Exact calculations based on actual platform data
   const totalRevenue = sales.reduce((acc, curr) => acc + curr.amount, 0);
   const totalOrders = sales.length;
   const averageTicket = totalOrders > 0 ? totalRevenue / totalOrders : 0;
-  const pixShare = ((sales.filter((s) => s.method === 'pix').length / totalOrders) * 100).toFixed(0);
-  const cardShare = (100 - Number(pixShare)).toFixed(0);
+  
+  const pixOrdersCount = sales.filter((s) => s.method === 'pix').length;
+  const pixShare = totalOrders > 0 ? ((pixOrdersCount / totalOrders) * 100).toFixed(0) : '0';
+  const cardShare = totalOrders > 0 ? (100 - Number(pixShare)).toFixed(0) : '0';
+
+  // Checkout Conversion metrics based on real charges/orders
+  const totalCompleted = sales.length + charges.filter((c) => c.status === 'pago').length;
+  const totalPendingOrAbandoned = charges.filter((c) => c.status === 'pendente' || c.status === 'expirado' || c.status === 'cancelado').length;
+  const totalCheckoutStarts = totalCompleted + totalPendingOrAbandoned;
+
+  const completionRate = totalCheckoutStarts > 0 ? ((totalCompleted / totalCheckoutStarts) * 100).toFixed(1) : '0.0';
+  const abandonmentRate = totalCheckoutStarts > 0 ? ((totalPendingOrAbandoned / totalCheckoutStarts) * 100).toFixed(1) : '0.0';
 
   return (
     <div className="space-y-6 pb-12 animate-in fade-in duration-300">
@@ -121,30 +131,43 @@ export const AnalyticsView: React.FC = () => {
             <div>
               <div className="flex justify-between text-gray-300 mb-1">
                 <span>Inícios de Checkout (Pix/Cartão):</span>
-                <span className="font-bold text-white">62</span>
+                <span className="font-bold text-white">{totalCheckoutStarts}</span>
               </div>
               <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
-                <div className="w-[100%] h-full bg-purple-500 rounded-full" />
+                <div 
+                  style={{ width: `${totalCheckoutStarts > 0 ? 100 : 0}%` }} 
+                  className="h-full bg-purple-500 rounded-full transition-all duration-300" 
+                />
               </div>
             </div>
 
             <div>
               <div className="flex justify-between text-gray-300 mb-1">
                 <span>Pagamentos Concluídos:</span>
-                <span className="font-bold text-emerald-400">48 (77.4%)</span>
+                <span className="font-bold text-emerald-400">
+                  {totalCompleted} ({completionRate}%)
+                </span>
               </div>
               <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
-                <div className="w-[77.4%] h-full bg-[#7be801] rounded-full" />
+                <div 
+                  style={{ width: `${completionRate}%` }} 
+                  className="h-full bg-[#7be801] rounded-full transition-all duration-300" 
+                />
               </div>
             </div>
 
             <div>
               <div className="flex justify-between text-gray-300 mb-1">
                 <span>Taxa de Abandono:</span>
-                <span className="font-bold text-amber-400">14 (22.6%)</span>
+                <span className="font-bold text-amber-400">
+                  {totalPendingOrAbandoned} ({abandonmentRate}%)
+                </span>
               </div>
               <div className="w-full h-2 rounded-full bg-white/5 overflow-hidden">
-                <div className="w-[22.6%] h-full bg-amber-500 rounded-full" />
+                <div 
+                  style={{ width: `${abandonmentRate}%` }} 
+                  className="h-full bg-amber-500 rounded-full transition-all duration-300" 
+                />
               </div>
             </div>
           </div>

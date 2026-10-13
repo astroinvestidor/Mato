@@ -3,7 +3,7 @@ import { Calendar, TrendingUp, ShoppingCart, Users, ChevronDown, ArrowUpRight } 
 import { useApp } from '../../context/AppContext';
 
 export const MetricsSummary: React.FC = () => {
-  const { periodFilter, setPeriodFilter } = useApp();
+  const { periodFilter, setPeriodFilter, sales, customers, transactions } = useApp();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const filterLabels: Record<string, string> = {
@@ -13,29 +13,33 @@ export const MetricsSummary: React.FC = () => {
     '90d': 'Este trimestre',
   };
 
+  const totalSalesAmount = sales.reduce((acc, curr) => acc + curr.amount, 0);
+  const totalOrdersCount = sales.length;
+  const totalCustomersCount = customers.length;
+
   const metrics = [
     {
       title: 'Vendas hoje',
-      value: 'R$ 1.248,90',
-      change: '↑ 12%',
+      value: `R$ ${totalSalesAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+      change: '0% hoje',
       icon: Calendar,
     },
     {
       title: 'Vendas este mês',
-      value: 'R$ 12.487,30',
-      change: '↑ 28%',
+      value: `R$ ${totalSalesAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+      change: '0% no período',
       icon: TrendingUp,
     },
     {
       title: 'Pedidos',
-      value: '48',
-      change: '↑ 15%',
+      value: `${totalOrdersCount}`,
+      change: `${totalOrdersCount} concluídos`,
       icon: ShoppingCart,
     },
     {
       title: 'Clientes',
-      value: '243',
-      change: '↑ 20%',
+      value: `${totalCustomersCount}`,
+      change: `${totalCustomersCount} cadastrados`,
       icon: Users,
     },
   ];

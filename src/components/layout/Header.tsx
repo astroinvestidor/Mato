@@ -7,30 +7,16 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onMobileMenuToggle }) => {
-  const { userProfile, setActiveTab, showToast } = useApp();
+  const { userProfile, setActiveTab, showToast, logout } = useApp();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-  const notifications = [
-    {
-      id: 1,
-      title: 'Pix recebido de R$ 97,00',
-      time: 'Há 12 minutos',
-      read: false,
-    },
-    {
-      id: 2,
-      title: 'Novo pedido #PED-1093 aprovado',
-      time: 'Há 1 hora',
-      read: false,
-    },
-    {
-      id: 3,
-      title: 'Loja "Sua Loja Sneakers" atingiu 1.840 acessos',
-      time: 'Hoje, 09:30',
-      read: true,
-    },
-  ];
+  const displayName = userProfile?.name || 'Visitante';
+  const displayEmail = userProfile?.email || '';
+  const displayAvatar = userProfile?.avatarText || 'U';
+  const displayPlan = userProfile?.planName || 'MATO Free';
+
+  const notifications: { id: number; title: string; time: string; read: boolean }[] = [];
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between px-6 py-4 bg-[#08090b]/90 backdrop-blur-md border-b border-[#141820]">
@@ -55,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({ onMobileMenuToggle }) => {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-xl font-bold tracking-tight text-white lg:text-2xl">
-                Olá, Mateus <span className="inline-block animate-pulse">👋</span>
+                Olá, {displayName} <span className="inline-block animate-pulse">👋</span>
               </h1>
             </div>
             <p className="text-[13px] text-[#7e8b9b] hidden sm:block mt-0.5">
@@ -78,33 +64,38 @@ export const Header: React.FC<HeaderProps> = ({ onMobileMenuToggle }) => {
             aria-label="Notificações"
           >
             <Bell className="w-5 h-5" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-[#08090b]" />
+            {notifications.length > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-[#08090b]" />
+            )}
           </button>
 
           {isNotificationsOpen && (
             <div className="absolute right-0 mt-2 w-80 rounded-2xl bg-[#0f131a] border border-[#1f2735] shadow-2xl p-3 z-50 animate-in fade-in slide-in-from-top-2">
               <div className="flex items-center justify-between px-2 py-1.5 border-b border-white/5 mb-2">
                 <span className="text-xs font-semibold text-white">Notificações</span>
-                <span className="text-[11px] text-emerald-400 cursor-pointer hover:underline" onClick={() => showToast('Todas as notificações marcadas como lidas')}>
-                  Marcar como lidas
-                </span>
               </div>
-              <div className="space-y-1.5">
-                {notifications.map((n) => (
-                  <div
-                    key={n.id}
-                    className="p-2.5 rounded-xl hover:bg-white/5 cursor-pointer transition-colors text-left"
-                  >
-                    <div className="flex items-start gap-2">
-                      <div className="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0" />
-                      <div>
-                        <p className="text-xs font-medium text-white">{n.title}</p>
-                        <span className="text-[10px] text-[#7e8b9b]">{n.time}</span>
+              {notifications.length === 0 ? (
+                <div className="py-6 text-center text-xs text-[#7e8b9b]">
+                  Nenhuma notificação no momento.
+                </div>
+              ) : (
+                <div className="space-y-1.5">
+                  {notifications.map((n) => (
+                    <div
+                      key={n.id}
+                      className="p-2.5 rounded-xl hover:bg-white/5 cursor-pointer transition-colors text-left"
+                    >
+                      <div className="flex items-start gap-2">
+                        <div className="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0" />
+                        <div>
+                          <p className="text-xs font-medium text-white">{n.title}</p>
+                          <span className="text-[10px] text-[#7e8b9b]">{n.time}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -119,10 +110,10 @@ export const Header: React.FC<HeaderProps> = ({ onMobileMenuToggle }) => {
             className="flex items-center gap-2.5 py-1.5 px-2.5 rounded-xl bg-[#11151c] hover:bg-[#161c26] border border-[#1c2432] transition-all"
           >
             <div className="flex items-center justify-center w-7 h-7 rounded-full bg-[#1e2634] text-xs font-bold text-white border border-white/10">
-              {userProfile.avatarText}
+              {displayAvatar}
             </div>
             <span className="text-xs font-medium text-white hidden md:inline-block">
-              {userProfile.name}
+              {displayName}
             </span>
             <ChevronDown className="w-3.5 h-3.5 text-[#7e8b9b]" />
           </button>
@@ -130,10 +121,10 @@ export const Header: React.FC<HeaderProps> = ({ onMobileMenuToggle }) => {
           {isProfileMenuOpen && (
             <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-[#0f131a] border border-[#1f2735] shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2">
               <div className="px-3 py-2 border-b border-white/5 mb-1">
-                <p className="text-xs font-semibold text-white">{userProfile.name}</p>
-                <p className="text-[11px] text-[#7e8b9b] truncate">{userProfile.email}</p>
+                <p className="text-xs font-semibold text-white">{displayName}</p>
+                <p className="text-[11px] text-[#7e8b9b] truncate">{displayEmail}</p>
                 <span className="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  {userProfile.planName}
+                  {displayPlan}
                 </span>
               </div>
 
@@ -163,7 +154,7 @@ export const Header: React.FC<HeaderProps> = ({ onMobileMenuToggle }) => {
 
               <button
                 onClick={() => {
-                  showToast('Sessão encerrada com segurança.');
+                  logout();
                   setIsProfileMenuOpen(false);
                 }}
                 className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-colors text-left"

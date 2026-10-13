@@ -1,9 +1,4 @@
-/**
- * MATO Platform - Supabase Client & Database Services
- * 
- * Configured with environment variable detection and fallback to a resilient
- * client architecture for local demonstration and automated testing.
- */
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 export interface SupabaseConfig {
   url: string;
@@ -12,23 +7,38 @@ export interface SupabaseConfig {
 
 export const getSupabaseConfig = (): SupabaseConfig => {
   return {
-    url: (import.meta as any).env?.VITE_SUPABASE_URL || 'https://mock-mato.supabase.co',
-    anonKey: (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || 'mock-anon-key-mato',
+    url: (import.meta as any).env?.VITE_SUPABASE_URL || '',
+    anonKey: (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || '',
   };
 };
 
 export const isSupabaseConfigured = (): boolean => {
   const config = getSupabaseConfig();
-  return (
-    config.url !== 'https://mock-mato.supabase.co' &&
-    config.anonKey !== 'mock-anon-key-mato' &&
-    Boolean(config.url && config.anonKey)
+  return Boolean(
+    config.url &&
+    config.anonKey &&
+    config.url !== 'https://seu-projeto.supabase.co' &&
+    config.anonKey !== 'sua-chave-anonima-publica'
   );
 };
 
+let supabaseInstance: SupabaseClient | null = null;
+
+export const getSupabaseClient = (): SupabaseClient | null => {
+  if (!isSupabaseConfigured()) return null;
+  if (!supabaseInstance) {
+    const config = getSupabaseConfig();
+    supabaseInstance = createClient(config.url, config.anonKey);
+  }
+  return supabaseInstance;
+};
+
 export const databaseStatus = {
-  isConfigured: isSupabaseConfigured(),
-  driver: isSupabaseConfigured() ? 'Supabase PostgREST + Auth' : 'Local Mock Reactive Store',
+  get isConfigured() {
+    return isSupabaseConfigured();
+  },
+  get driver() {
+    return isSupabaseConfigured() ? 'Supabase PostgreSQL (Ativo)' : 'Armazenamento Local';
+  },
   rlsEnforced: true,
-  currentUserId: 'usr_mateus_silva_demo',
 };

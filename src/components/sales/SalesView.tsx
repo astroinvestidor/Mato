@@ -36,10 +36,10 @@ export const SalesView: React.FC = () => {
 
         <div className="flex items-center gap-2 text-xs">
           <div className="px-3 py-1.5 rounded-xl bg-[#0c1016] border border-[#1b2330] text-gray-300">
-            Total de Pedidos: <strong className="text-white">48</strong>
+            Total de Pedidos: <strong className="text-white">{sales.length}</strong>
           </div>
           <div className="px-3 py-1.5 rounded-xl bg-[#0c1016] border border-[#1b2330] text-emerald-400 font-bold">
-            R$ 12.487,30 faturados
+            R$ {sales.reduce((acc, s) => acc + s.amount, 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} faturados
           </div>
         </div>
       </div>
