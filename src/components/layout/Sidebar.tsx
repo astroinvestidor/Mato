@@ -72,7 +72,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onMobileClose }) =
             <img
               src="/mato-brand-solid-white.png"
               alt="MATO"
-              className="h-9 w-auto object-contain filter drop-shadow-[0_0_10px_rgba(255,255,255,0.15)] group-hover:brightness-105 transition-all"
+              className="h-7 w-auto object-contain filter drop-shadow-[0_0_10px_rgba(255,255,255,0.15)] group-hover:brightness-105 transition-all"
             />
           </div>
 

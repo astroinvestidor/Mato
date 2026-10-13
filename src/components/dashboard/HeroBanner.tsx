@@ -150,100 +150,14 @@ export const HeroBanner: React.FC = () => {
                   <span className="w-1 h-1 rounded-full bg-emerald-400" /> Pix
                 </div>
 
-                {/* QR Code graphic (Ilustração fixa permanente que nunca pisca nem some) */}
-                <div className="w-24 h-24 mx-auto my-2 p-1.5 rounded-xl bg-white flex items-center justify-center shadow-md">
-                  <svg
-                    viewBox="0 0 29 29"
-                    className="w-full h-full text-black"
-                    fill="currentColor"
-                    shapeRendering="crispEdges"
-                    aria-label="QR Code Ilustrativo"
-                  >
-                    {/* Top Left Pattern */}
-                    <rect x="2" y="2" width="7" height="7" />
-                    <rect x="3" y="3" width="5" height="5" fill="white" />
-                    <rect x="4" y="4" width="3" height="3" />
-
-                    {/* Top Right Pattern */}
-                    <rect x="20" y="2" width="7" height="7" />
-                    <rect x="21" y="3" width="5" height="5" fill="white" />
-                    <rect x="22" y="4" width="3" height="3" />
-
-                    {/* Bottom Left Pattern */}
-                    <rect x="2" y="20" width="7" height="7" />
-                    <rect x="3" y="21" width="5" height="5" fill="white" />
-                    <rect x="4" y="22" width="3" height="3" />
-
-                    {/* Timing and Guide patterns */}
-                    <rect x="10" y="4" width="1" height="1" />
-                    <rect x="12" y="4" width="1" height="1" />
-                    <rect x="14" y="4" width="1" height="1" />
-                    <rect x="16" y="4" width="1" height="1" />
-                    <rect x="18" y="4" width="1" height="1" />
-                    <rect x="4" y="10" width="1" height="1" />
-                    <rect x="4" y="12" width="1" height="1" />
-                    <rect x="4" y="14" width="1" height="1" />
-                    <rect x="4" y="16" width="1" height="1" />
-                    <rect x="4" y="18" width="1" height="1" />
-
-                    {/* Alignment Pattern */}
-                    <rect x="18" y="18" width="5" height="5" />
-                    <rect x="19" y="19" width="3" height="3" fill="white" />
-                    <rect x="20" y="20" width="1" height="1" />
-
-                    {/* QR Data modules */}
-                    <rect x="10" y="2" width="1" height="2" />
-                    <rect x="12" y="2" width="2" height="1" />
-                    <rect x="16" y="2" width="2" height="2" />
-                    <rect x="10" y="6" width="2" height="1" />
-                    <rect x="14" y="6" width="1" height="3" />
-                    <rect x="17" y="6" width="1" height="2" />
-
-                    <rect x="2" y="10" width="2" height="1" />
-                    <rect x="6" y="10" width="2" height="2" />
-                    <rect x="9" y="10" width="2" height="2" />
-                    <rect x="12" y="11" width="1" height="2" />
-                    <rect x="14" y="10" width="2" height="1" />
-                    <rect x="17" y="10" width="2" height="2" />
-                    <rect x="20" y="10" width="1" height="3" />
-                    <rect x="23" y="10" width="2" height="1" />
-                    <rect x="26" y="10" width="1" height="2" />
-
-                    <rect x="1" y="13" width="2" height="2" />
-                    <rect x="4" y="13" width="1" height="1" />
-                    <rect x="7" y="12" width="2" height="2" />
-                    <rect x="10" y="13" width="3" height="1" />
-                    <rect x="15" y="13" width="1" height="3" />
-                    <rect x="18" y="13" width="1" height="2" />
-                    <rect x="21" y="12" width="2" height="2" />
-                    <rect x="25" y="13" width="2" height="2" />
-
-                    <rect x="2" y="16" width="1" height="2" />
-                    <rect x="5" y="15" width="2" height="2" />
-                    <rect x="9" y="15" width="1" height="3" />
-                    <rect x="11" y="16" width="2" height="1" />
-                    <rect x="14" y="16" width="2" height="2" />
-                    <rect x="24" y="15" width="3" height="1" />
-                    <rect x="26" y="17" width="1" height="2" />
-
-                    <rect x="10" y="20" width="2" height="2" />
-                    <rect x="13" y="19" width="2" height="2" />
-                    <rect x="16" y="20" width="1" height="3" />
-                    <rect x="24" y="18" width="1" height="2" />
-                    <rect x="26" y="20" width="2" height="2" />
-
-                    <rect x="10" y="23" width="3" height="1" />
-                    <rect x="14" y="22" width="1" height="2" />
-                    <rect x="17" y="24" width="2" height="2" />
-                    <rect x="20" y="24" width="2" height="1" />
-                    <rect x="24" y="23" width="3" height="2" />
-
-                    <rect x="11" y="25" width="2" height="2" />
-                    <rect x="14" y="25" width="2" height="2" />
-                    <rect x="19" y="26" width="1" height="1" />
-                    <rect x="22" y="26" width="2" height="1" />
-                    <rect x="26" y="26" width="1" height="1" />
-                  </svg>
+                {/* QR Code graphic (Ilustração autêntica, fixa e original) */}
+                <div className="w-24 h-24 mx-auto my-2 p-1.5 rounded-2xl bg-white flex items-center justify-center shadow-lg">
+                  <img
+                    src="/pix-real-qr.png"
+                    alt="Pix QR Code"
+                    className="w-full h-full object-contain"
+                    loading="eager"
+                  />
                 </div>
 
                 {/* Payment Options Bottom Bar */}
