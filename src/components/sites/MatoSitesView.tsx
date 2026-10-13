@@ -191,11 +191,11 @@ export const MatoSitesView: React.FC = () => {
       {/* Top Plan & Credits Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-[#7be801]/15 text-[#7be801] border border-[#7be801]/30">
-            <Sparkles className="w-5 h-5" />
+          <div className="p-2 rounded-xl bg-purple-500/15 text-purple-400 border border-purple-500/30">
+            <Globe className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-xl font-black text-white">MATO Sites Studio</h2>
+            <h2 className="text-xl font-black text-white">MATO Sites</h2>
             <p className="text-xs text-[#7e8b9b]">
               Cole qualquer prompt de IA ou converse para gerar e personalizar seu site na hora.
             </p>
