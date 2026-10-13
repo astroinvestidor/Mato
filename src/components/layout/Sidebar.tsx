@@ -90,6 +90,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onMobileClose }) =
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
+            const isSites = item.id === 'sites';
 
             return (
               <button
@@ -97,14 +98,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen, onMobileClose }) =
                 onClick={() => handleNavClick(item.id)}
                 className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[13.5px] font-medium transition-all ${
                   isActive
-                    ? 'bg-[#12281b] text-[#7be801] border border-[#7be801]/20 shadow-[0_0_15px_rgba(123, 232, 1,0.1)]'
+                    ? isSites
+                      ? 'bg-purple-900/20 text-purple-300 border border-purple-500/35 shadow-[0_0_15px_rgba(168,85,247,0.18)] font-bold'
+                      : 'bg-[#12281b] text-[#7be801] border border-[#7be801]/20 shadow-[0_0_15px_rgba(123, 232, 1,0.1)]'
+                    : isSites
+                    ? 'text-[#9aa5b5] hover:text-purple-300 hover:bg-purple-950/25'
                     : 'text-[#9aa5b5] hover:text-white hover:bg-[#141820]'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <Icon
                     className={`w-[18px] h-[18px] transition-colors ${
-                      isActive ? 'text-[#7be801]' : 'text-[#7e8b9b]'
+                      isActive
+                        ? isSites
+                          ? 'text-purple-400'
+                          : 'text-[#7be801]'
+                        : 'text-[#7e8b9b]'
                     }`}
                   />
                   <span>{item.label}</span>

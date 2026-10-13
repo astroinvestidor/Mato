@@ -6,6 +6,7 @@ import {
   Bell,
   CreditCard,
   Zap,
+  Globe,
   Check,
   ArrowRight,
   ShieldCheck,
@@ -140,18 +141,21 @@ export const SettingsView: React.FC = () => {
         {[
           { id: 'perfil', label: 'Meu Perfil', icon: User },
           { id: 'planos', label: 'Planos & Upgrade', icon: CreditCard },
-          { id: 'ia', label: 'Consumo da MATO IA', icon: Zap },
+          { id: 'ia', label: 'Consumo do MATO Sites', icon: Globe },
           { id: 'seguranca', label: 'Segurança', icon: Shield },
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
+          const isSitesTab = tab.id === 'ia';
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl font-semibold transition-colors ${
                 isActive
-                  ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                  ? isSitesTab
+                    ? 'bg-purple-500/15 text-purple-400 border border-purple-500/30'
+                    : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -274,12 +278,12 @@ export const SettingsView: React.FC = () => {
         </div>
       )}
 
-      {/* Tab: Consumo da IA */}
+      {/* Tab: Consumo do MATO Sites */}
       {activeTab === 'ia' && (
         <div className="max-w-2xl rounded-2xl bg-[#0c1016] border border-[#1b2330] p-6 space-y-5">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-bold text-white">Consumo de Tokens & Créditos ({userProfile?.planName || 'MATO Free'})</h3>
+              <h3 className="text-sm font-bold text-white">Consumo de Tokens & Créditos do MATO Sites ({userProfile?.planName || 'MATO Free'})</h3>
               <p className="text-xs text-[#7e8b9b]">Ciclo mensal renova no dia 01 de cada mês.</p>
             </div>
             <button
@@ -287,29 +291,32 @@ export const SettingsView: React.FC = () => {
                 updateUserProfile({ aiCreditsTotal: creditsTotal + 50 });
                 showToast('Pacote extra de 50 créditos adicionado à sua conta!');
               }}
-              className="px-3.5 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold hover:bg-emerald-500/20"
+              className="px-3.5 py-1.5 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/40 text-xs font-bold hover:bg-purple-500/25 transition-all shadow-[0_0_12px_rgba(168,85,247,0.2)]"
             >
               Comprar Créditos Extras
             </button>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#121822] space-y-2 text-xs">
+          <div className="p-4 rounded-xl bg-[#121822] space-y-2 text-xs border border-purple-500/20">
             <div className="flex justify-between font-bold text-white">
               <span>Uso do Limite Mensal:</span>
-              <span className="text-emerald-400">
+              <span className="text-purple-400 font-bold">
                 {creditsUsed} de {creditsTotal} créditos ({creditsPercent}%)
               </span>
             </div>
             <div className="w-full h-3 rounded-full bg-white/5 overflow-hidden">
               <div
-                className="h-full bg-[#7be801] rounded-full transition-all duration-300"
+                className="h-full bg-purple-600 rounded-full transition-all duration-300 shadow-[0_0_12px_rgba(168,85,247,0.5)]"
                 style={{ width: `${creditsPercent}%` }}
               />
             </div>
           </div>
 
           <div className="p-4 rounded-xl bg-[#121822] border border-white/5 text-xs space-y-1.5 text-gray-300">
-            <p className="font-bold text-white">Tabela de Consumo por Plano:</p>
+            <p className="font-bold text-white flex items-center gap-1.5">
+              <Globe className="w-4 h-4 text-purple-400" />
+              <span>Tabela de Consumo por Plano (MATO Sites):</span>
+            </p>
             <p>• <strong>MATO Free:</strong> 50 créditos/mês • Até 3 sites (2 créditos por site gerado)</p>
             <p>• <strong>MATO Pro:</strong> 300 créditos/mês • Até 15 sites + Domínio próprio + Exportar HTML</p>
             <p>• <strong>MATO Business:</strong> 1.000 créditos/mês • Sites ilimitados + Desconto de 50% nas edições por chat (0,5 crédito)</p>
