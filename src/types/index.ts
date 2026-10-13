@@ -84,7 +84,7 @@ export interface SiteHeroImage {
 
 export interface SitePaymentGatewayConfig {
   enabled: boolean;
-  provider: 'mato_pay' | 'mercado_pago' | 'stripe' | 'asaas' | 'pagbank' | 'kiwify';
+  provider: 'mato_pay';
   connected: boolean;
   autoCreditAccount?: boolean;
   pixKey: string;

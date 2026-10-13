@@ -768,45 +768,17 @@ export function detectPaymentGatewayFromText(
   let changed = false;
   const notes: string[] = [];
 
-  if (/(mercado\s*pago|mercadopago)/i.test(lower)) {
-    base.provider = 'mercado_pago';
-    base.connected = true;
-    base.enabled = true;
-    changed = true;
-    notes.push('Gateway **Mercado Pago** conectado à sua conta');
-  } else if (/\bstripe\b/i.test(lower)) {
-    base.provider = 'stripe';
-    base.connected = true;
-    base.enabled = true;
-    changed = true;
-    notes.push('Gateway **Stripe** conectado à sua conta');
-  } else if (/\basaas\b/i.test(lower)) {
-    base.provider = 'asaas';
-    base.connected = true;
-    base.enabled = true;
-    changed = true;
-    notes.push('Gateway **Asaas** conectado à sua conta');
-  } else if (/(pagbank|pagseguro)/i.test(lower)) {
-    base.provider = 'pagbank';
-    base.connected = true;
-    base.enabled = true;
-    changed = true;
-    notes.push('Gateway **PagBank** conectado à sua conta');
-  } else if (/(kiwify|hotmart|eduzz|kirvano)/i.test(lower)) {
-    base.provider = 'kiwify';
-    base.connected = true;
-    base.enabled = true;
-    changed = true;
-    notes.push('Gateway **Kiwify / Hotmart** conectado à sua conta');
-  } else if (
-    /(gateway\s+de\s+pagamento|checkout\s+transparente|sistema\s+de\s+pagamento|pagamento\s+online|receber\s+pagamentos|conectar\s+pagamento|implementar\s+pagamento)/i.test(
+  if (
+    /(gateway|checkout|sistema\s+de\s+pagamento|pagamento\s+online|receber\s+pagamentos|conectar\s+pagamento|implementar\s+pagamento|mercado\s*pago|stripe|asaas|pagbank|kiwify|hotmart)/i.test(
       lower
     )
   ) {
+    base.provider = 'mato_pay';
     base.enabled = true;
     base.connected = true;
+    base.autoCreditAccount = true;
     changed = true;
-    notes.push('**Gateway de Pagamento (PIX + Cartão até 12x)** conectado direto à sua conta');
+    notes.push('**Gateway Oficial MATO Pay (PIX + Cartão até 12x)** conectado direto à sua conta');
   }
 
   const pixKeyMatch = text.match(
@@ -2970,7 +2942,7 @@ Retorne APENAS um JSON válido (sem markdown) no formato:
   "newSectionTitle": "título da nova seção se pediu para adicionar algo na página, senão vazio",
   "newSectionContent": "conteúdo da nova seção se pediu para adicionar algo, senão vazio",
   "newNiche": "novo nicho caso tenha colado um novo prompt ou pedido para mudar o tema do site, senão vazio",
-  "gatewayProvider": "mercado_pago" | "stripe" | "asaas" | "pagbank" | "kiwify" | "mato_pay" | "",
+  "gatewayProvider": "mato_pay" | "",
   "assistantReply": "Resposta direta em português explicando exatamente o que você alterou no site."
 }`;
 
@@ -3036,12 +3008,11 @@ Retorne APENAS um JSON válido (sem markdown) no formato:
                   baseBlueprint.brandName
                 ).config;
               }
-              if (plan.gatewayProvider) {
-                baseBlueprint.paymentGateway.provider = plan.gatewayProvider;
-              }
+              baseBlueprint.paymentGateway.provider = 'mato_pay';
               baseBlueprint.paymentGateway.enabled = true;
               baseBlueprint.paymentGateway.connected = true;
-              summaryOfChanges.push(`Gateway de pagamento conectado à sua conta`);
+              baseBlueprint.paymentGateway.autoCreditAccount = true;
+              summaryOfChanges.push(`Gateway oficial **MATO Pay** conectado à sua conta`);
             }
             if (plan.actionType === 'add_image' || plan.imageSubject) {
               const subj = plan.imageSubject || baseBlueprint.niche;
@@ -3284,15 +3255,7 @@ export function renderBlueprintToHtml(bp: SiteBlueprint): string {
     autoCreditAccount: true,
   };
 
-  const providerNames: Record<SitePaymentGatewayConfig['provider'], string> = {
-    mato_pay: 'MATO Pay Checkout',
-    mercado_pago: 'Mercado Pago',
-    stripe: 'Stripe Payments',
-    asaas: 'Asaas Pagamentos',
-    pagbank: 'PagBank / PagSeguro',
-    kiwify: 'Checkout Digital',
-  };
-  const gwLabel = providerNames[gw.provider] || 'Gateway Seguro';
+  const gwLabel = 'MATO Pay';
   const pixKeySafe = gw.pixKey || `pix@${bp.brandName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'loja'}.com.br`;
   const installmentsMax = gw.installmentsMax || 12;
 

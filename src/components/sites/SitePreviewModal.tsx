@@ -83,18 +83,8 @@ const SECTION_OPTIONS = [
   'Oferta / Checkout / Agendamento',
 ];
 
-const GATEWAY_PROVIDERS: {
-  id: SitePaymentGatewayConfig['provider'];
-  name: string;
-  desc: string;
-}[] = [
-  { id: 'mato_pay', name: 'MATO Pay (Automático na Conta)', desc: 'Cai direto no seu saldo MATO Pay • PIX & Cartão' },
-  { id: 'mercado_pago', name: 'Mercado Pago', desc: 'Checkout Transparente • PIX & Cartão' },
-  { id: 'stripe', name: 'Stripe', desc: 'Cartão Global & Checkout' },
-  { id: 'asaas', name: 'Asaas', desc: 'PIX Instantâneo & Cartão' },
-  { id: 'pagbank', name: 'PagBank / PagSeguro', desc: 'PIX & Cartão Parcelado' },
-  { id: 'kiwify', name: 'Kiwify / Hotmart', desc: 'Infoprodutos & Cursos' },
-];
+const GATEWAY_PROVIDER_NAME = 'MATO Pay (Gateway Próprio Oficial)';
+
 
 export const SitePreviewModal: React.FC<SitePreviewModalProps> = ({ site, onClose }) => {
   const { userProfile, consumeAICredits, updateSite, deleteSite, receiveSitePayment, showToast } = useApp();
@@ -332,17 +322,17 @@ export const SitePreviewModal: React.FC<SitePreviewModalProps> = ({ site, onClos
   // Save & Connect Payment Gateway
   const handleSavePaymentGateway = () => {
     const updatedBp = JSON.parse(JSON.stringify(effectiveBlueprint));
-    const providerObj = GATEWAY_PROVIDERS.find((p) => p.id === gwProvider);
 
     updatedBp.paymentGateway = {
       enabled: true,
-      provider: gwProvider,
+      provider: 'mato_pay',
       connected: true,
-      pixKey: gwPixKey.trim() || `pix@${updatedBp.brandName.toLowerCase().replace(/[^a-z0-9]/g, '')}.com.br`,
+      autoCreditAccount: true,
+      pixKey: gwPixKey.trim() || `pix@${updatedBp.brandName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'loja'}.com.br`,
       pixBeneficiary: gwBeneficiary.trim() || updatedBp.brandName,
-      publicKey: gwPublicKey.trim() || 'pk_live_connected',
+      publicKey: gwPublicKey.trim() || 'pk_live_mato_pay',
       checkoutUrl: gwCheckoutUrl.trim(),
-      methods: gwMethods,
+      methods: gwMethods.length > 0 ? gwMethods : ['pix', 'credit_card'],
       installmentsMax: gwInstallments,
     };
 
@@ -359,8 +349,8 @@ export const SitePreviewModal: React.FC<SitePreviewModalProps> = ({ site, onClos
           role: 'assistant',
           thoughtSeconds: 1,
           activeModelBadge: 'Gateway Integrator',
-          text: `Gateway **${providerObj?.name || gwProvider}** conectado e implementado com sucesso no site!\n• **Chave PIX**: \`${updatedBp.paymentGateway.pixKey}\`\n• **Métodos ativos**: ${gwMethods.join(', ').toUpperCase()} (em até ${gwInstallments}x)\n\nClique em qualquer botão de compra do site para testar o checkout transparente ao vivo!`,
-          milestoneTitle: `Gateway ${providerObj?.name} Conectado`,
+          text: `Gateway oficial **MATO Pay** integrado e ativo no site!\n• **Chave PIX**: \`${updatedBp.paymentGateway.pixKey}\`\n• **Métodos ativos**: ${gwMethods.join(', ').toUpperCase()} (em até ${gwInstallments}x)\n• **Recebimento**: Automático na sua conta MATO Pay\n\nTodos os pagamentos realizados no site caem diretamente no seu saldo disponível!`,
+          milestoneTitle: `Gateway MATO Pay Integrado`,
           timestamp: now,
         },
       ],
@@ -368,7 +358,7 @@ export const SitePreviewModal: React.FC<SitePreviewModalProps> = ({ site, onClos
 
     setIframeRenderKey((k) => k + 1);
     setIsGatewayModalOpen(false);
-    showToast(`Gateway ${providerObj?.name} conectado e implementado no site!`);
+    showToast(`Gateway oficial MATO Pay integrado e conectado ao site!`);
   };
 
   const handleConfirmDiscovery = async () => {
@@ -1097,32 +1087,32 @@ export const SitePreviewModal: React.FC<SitePreviewModalProps> = ({ site, onClos
                   </div>
                 </div>
 
-                {/* Gateway Provider Selection */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-300 block">
-                    1. Escolha a operadora / gateway conectado:
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {GATEWAY_PROVIDERS.map((p) => (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => setGwProvider(p.id)}
-                        className={`p-2.5 rounded-xl border text-left transition ${
-                          gwProvider === p.id
-                            ? 'bg-emerald-500/15 border-emerald-400 text-white'
-                            : 'bg-[#22242c] border-white/10 text-gray-300 hover:text-white'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-extrabold">{p.name}</span>
-                          {gwProvider === p.id && (
-                            <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          )}
+                {/* Exclusive Gateway: MATO Pay */}
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/15 via-[#20222a] to-[#181a21] border border-emerald-400/40 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-500 text-black flex items-center justify-center font-black text-base shadow-[0_0_15px_rgba(16,185,129,0.35)] flex-shrink-0">
+                        M
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-black text-white">MATO Pay</span>
+                          <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                            Gateway Único Oficial
+                          </span>
                         </div>
-                        <span className="text-[10px] text-gray-400 block mt-0.5">{p.desc}</span>
-                      </button>
-                    ))}
+                        <p className="text-[11px] text-gray-300">
+                          Gateway proprietário da plataforma • 100% dos pagamentos vão direto para sua conta
+                        </p>
+                      </div>
+                    </div>
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+                  <div className="text-[11px] text-emerald-300/90 pt-2 border-t border-white/10 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span><strong>Integração Automática & Exclusiva:</strong> Seus clientes só pagam pelo MATO Pay (PIX & Cartão em até {gwInstallments}x). Nenhum outro gateway externo é permitido.</span>
                   </div>
                 </div>
 
