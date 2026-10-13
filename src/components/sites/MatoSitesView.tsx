@@ -41,38 +41,6 @@ export const MatoSitesView: React.FC = () => {
   const limits = getPlanLimits(userProfile?.planName);
   const selectedPreviewSite = sites.find((s) => s.id === selectedPreviewSiteId) || null;
 
-  const starterPrompts = [
-    {
-      label: '📚 PDF Infantil & Atividades',
-      type: 'landing_page' as SiteType,
-      prompt:
-        'Crie uma página de vendas para um Kit de Atividades em PDF Infantil de Alfabetização Lúdica e Coordenação Motora para crianças de 2 a 8 anos, prontas para imprimir em casa por R$ 47,00.',
-    },
-    {
-      label: '🚀 Site Futurístico / Tech',
-      type: 'sistema_web' as SiteType,
-      prompt:
-        'Eu quero um site futurístico para a marca CyberPulse com automação inteligente, visual neon e destaques completos.',
-    },
-    {
-      label: '🤍 Site Minimalista Clean',
-      type: 'landing_page' as SiteType,
-      prompt:
-        'Quero que deixe o site minimalista e elegante para o Studio Aura com destaques, diferenciais, avaliações e dúvidas.',
-    },
-    {
-      label: '💅 Estúdio de Unhas & Beleza',
-      type: 'institucional' as SiteType,
-      prompt:
-        'Crie um site para o Studio Bella Nails de alongamento de unhas e manicure com fotos, preços e agendamento.',
-    },
-    {
-      label: '🛍️ Loja Exclusiva / Streetwear',
-      type: 'loja_virtual' as SiteType,
-      prompt:
-        'Quero um site com nome Snoop de loja streetwear e produtos exclusivos no estilo urbano.',
-    },
-  ];
 
   const handleInstantBuild = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -240,7 +208,7 @@ export const MatoSitesView: React.FC = () => {
           {/* Main Prompt Box */}
           <form
             onSubmit={handleInstantBuild}
-            className="mt-4 rounded-2xl bg-[#18191E] border border-white/15 focus-within:border-[#7be801] p-4 shadow-2xl transition-all text-left"
+            className="mt-4 rounded-2xl bg-[#18191E] border border-white/15 focus-within:border-purple-500/60 p-4 shadow-2xl transition-all text-left"
           >
             <textarea
               rows={4}
@@ -270,7 +238,7 @@ export const MatoSitesView: React.FC = () => {
                     onClick={() => setSelectedType(t.id as SiteType)}
                     className={`px-3 py-1 rounded-full text-[11px] font-semibold transition ${
                       selectedType === t.id
-                        ? 'bg-[#7be801] text-black font-bold'
+                        ? 'bg-purple-600 text-white font-bold shadow-[0_0_12px_rgba(168,85,247,0.35)]'
                         : 'bg-white/5 text-gray-300 hover:text-white'
                     }`}
                   >
@@ -281,16 +249,16 @@ export const MatoSitesView: React.FC = () => {
 
               <div className="flex items-center gap-2.5">
                 <span className="text-[11px] text-gray-400 hidden sm:inline">
-                  <strong className="text-[#7be801]">{limits.siteGenerationCost} créditos</strong>
+                  <strong className="text-purple-400">{limits.siteGenerationCost} créditos</strong>
                 </span>
                 <button
                   type="submit"
                   disabled={isBuilding || !heroPrompt.trim()}
-                  className="px-4 py-2 rounded-full bg-[#7be801] hover:bg-[#68c700] text-black font-black text-xs flex items-center gap-1.5 transition-all shadow-[0_0_20px_rgba(123,232,1,0.3)] disabled:opacity-40"
+                  className="px-4 py-2 rounded-full bg-purple-600 hover:bg-purple-500 text-white font-black text-xs flex items-center gap-1.5 transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_25px_rgba(168,85,247,0.6)] disabled:opacity-40 cursor-pointer"
                 >
                   {isBuilding ? (
                     <>
-                      <Sparkles className="w-4 h-4 animate-spin" />
+                      <Sparkles className="w-4 h-4 animate-spin text-purple-200" />
                       <span>Iniciando IA...</span>
                     </>
                   ) : (
@@ -303,23 +271,6 @@ export const MatoSitesView: React.FC = () => {
               </div>
             </div>
           </form>
-
-          {/* Starter Chips */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-            {starterPrompts.map((item, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => {
-                  setSelectedType(item.type);
-                  setHeroPrompt(item.prompt);
-                }}
-                className="px-3.5 py-1.5 rounded-full bg-[#1C1D22] hover:bg-[#25272E] border border-white/10 text-xs text-gray-200 hover:text-white transition"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 
@@ -334,7 +285,7 @@ export const MatoSitesView: React.FC = () => {
         {sites.length === 0 ? (
           <div className="rounded-2xl bg-[#111318] border border-white/10 p-8 text-center text-xs text-gray-400">
             Você ainda não possui nenhum site criado. Digite <strong className="text-white">"crie uma página de venda"</strong> acima e clique em{' '}
-            <strong className="text-[#7be801]">Construir</strong> para iniciar a conversa com a IA!
+            <strong className="text-purple-400">Construir</strong> para iniciar a conversa com a IA!
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
