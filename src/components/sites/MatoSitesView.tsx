@@ -225,9 +225,9 @@ export const MatoSitesView: React.FC = () => {
       {/* CENTRAL CONVERSATIONAL PROMPT BUILDER */}
       <div className="relative rounded-3xl bg-[#111318] border border-white/10 p-6 sm:p-10 shadow-2xl overflow-hidden">
         <div className="max-w-3xl mx-auto text-center space-y-5 relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#7be801]/10 border border-[#7be801]/30 text-[#7be801] text-xs font-bold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>MATO IA • Construtor Interativo & Leitor de Prompts</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-500/15 border border-purple-500/40 text-purple-300 text-xs font-bold shadow-[0_0_15px_rgba(168,85,247,0.15)]">
+            <Globe className="w-3.5 h-3.5 text-purple-400" />
+            <span>MATO Sites • Construtor Interativo & Leitor de Prompts</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
