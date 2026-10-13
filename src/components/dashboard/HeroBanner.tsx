@@ -1,15 +1,9 @@
 import React from 'react';
-import { ArrowRight, QrCode, CreditCard, FileText, Sparkles, Check, Copy } from 'lucide-react';
+import { ArrowRight, QrCode, CreditCard, Sparkles } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export const HeroBanner: React.FC = () => {
-  const { setActiveTab, setIsCreateChargeModalOpen, setIsCreateSiteModalOpen, showToast } = useApp();
-
-  const handleCopyMockPix = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigator.clipboard?.writeText('00020126580014br.gov.bcb.pix0136mato-demo-carlos-150-pix-key5204000053039865405150.005802BR5912MatoPayDemo6009SaoPaulo62070503***6304E1D2');
-    showToast('Chave Pix copiada com sucesso!');
-  };
+  const { setActiveTab, setIsCreateChargeModalOpen, setIsCreateSiteModalOpen } = useApp();
 
   return (
     <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0c1410] via-[#090e13] to-[#07090c] border border-[#1b2b20]/60 p-6 md:p-10 shadow-2xl">
@@ -156,25 +150,104 @@ export const HeroBanner: React.FC = () => {
                   <span className="w-1 h-1 rounded-full bg-emerald-400" /> Pix
                 </div>
 
-                {/* QR Code graphic */}
-                <div className="w-24 h-24 mx-auto my-1.5 p-1 rounded-lg bg-white flex items-center justify-center shadow-md">
-                  <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=MATO-DEMO-PAY-150"
-                    alt="Pix QR Code"
-                    className="w-full h-full object-contain"
-                  />
+                {/* QR Code graphic (Ilustração fixa permanente que nunca pisca nem some) */}
+                <div className="w-24 h-24 mx-auto my-2 p-1.5 rounded-xl bg-white flex items-center justify-center shadow-md">
+                  <svg
+                    viewBox="0 0 29 29"
+                    className="w-full h-full text-black"
+                    fill="currentColor"
+                    shapeRendering="crispEdges"
+                    aria-label="QR Code Ilustrativo"
+                  >
+                    {/* Top Left Pattern */}
+                    <rect x="2" y="2" width="7" height="7" />
+                    <rect x="3" y="3" width="5" height="5" fill="white" />
+                    <rect x="4" y="4" width="3" height="3" />
+
+                    {/* Top Right Pattern */}
+                    <rect x="20" y="2" width="7" height="7" />
+                    <rect x="21" y="3" width="5" height="5" fill="white" />
+                    <rect x="22" y="4" width="3" height="3" />
+
+                    {/* Bottom Left Pattern */}
+                    <rect x="2" y="20" width="7" height="7" />
+                    <rect x="3" y="21" width="5" height="5" fill="white" />
+                    <rect x="4" y="22" width="3" height="3" />
+
+                    {/* Timing and Guide patterns */}
+                    <rect x="10" y="4" width="1" height="1" />
+                    <rect x="12" y="4" width="1" height="1" />
+                    <rect x="14" y="4" width="1" height="1" />
+                    <rect x="16" y="4" width="1" height="1" />
+                    <rect x="18" y="4" width="1" height="1" />
+                    <rect x="4" y="10" width="1" height="1" />
+                    <rect x="4" y="12" width="1" height="1" />
+                    <rect x="4" y="14" width="1" height="1" />
+                    <rect x="4" y="16" width="1" height="1" />
+                    <rect x="4" y="18" width="1" height="1" />
+
+                    {/* Alignment Pattern */}
+                    <rect x="18" y="18" width="5" height="5" />
+                    <rect x="19" y="19" width="3" height="3" fill="white" />
+                    <rect x="20" y="20" width="1" height="1" />
+
+                    {/* QR Data modules */}
+                    <rect x="10" y="2" width="1" height="2" />
+                    <rect x="12" y="2" width="2" height="1" />
+                    <rect x="16" y="2" width="2" height="2" />
+                    <rect x="10" y="6" width="2" height="1" />
+                    <rect x="14" y="6" width="1" height="3" />
+                    <rect x="17" y="6" width="1" height="2" />
+
+                    <rect x="2" y="10" width="2" height="1" />
+                    <rect x="6" y="10" width="2" height="2" />
+                    <rect x="9" y="10" width="2" height="2" />
+                    <rect x="12" y="11" width="1" height="2" />
+                    <rect x="14" y="10" width="2" height="1" />
+                    <rect x="17" y="10" width="2" height="2" />
+                    <rect x="20" y="10" width="1" height="3" />
+                    <rect x="23" y="10" width="2" height="1" />
+                    <rect x="26" y="10" width="1" height="2" />
+
+                    <rect x="1" y="13" width="2" height="2" />
+                    <rect x="4" y="13" width="1" height="1" />
+                    <rect x="7" y="12" width="2" height="2" />
+                    <rect x="10" y="13" width="3" height="1" />
+                    <rect x="15" y="13" width="1" height="3" />
+                    <rect x="18" y="13" width="1" height="2" />
+                    <rect x="21" y="12" width="2" height="2" />
+                    <rect x="25" y="13" width="2" height="2" />
+
+                    <rect x="2" y="16" width="1" height="2" />
+                    <rect x="5" y="15" width="2" height="2" />
+                    <rect x="9" y="15" width="1" height="3" />
+                    <rect x="11" y="16" width="2" height="1" />
+                    <rect x="14" y="16" width="2" height="2" />
+                    <rect x="24" y="15" width="3" height="1" />
+                    <rect x="26" y="17" width="1" height="2" />
+
+                    <rect x="10" y="20" width="2" height="2" />
+                    <rect x="13" y="19" width="2" height="2" />
+                    <rect x="16" y="20" width="1" height="3" />
+                    <rect x="24" y="18" width="1" height="2" />
+                    <rect x="26" y="20" width="2" height="2" />
+
+                    <rect x="10" y="23" width="3" height="1" />
+                    <rect x="14" y="22" width="1" height="2" />
+                    <rect x="17" y="24" width="2" height="2" />
+                    <rect x="20" y="24" width="2" height="1" />
+                    <rect x="24" y="23" width="3" height="2" />
+
+                    <rect x="11" y="25" width="2" height="2" />
+                    <rect x="14" y="25" width="2" height="2" />
+                    <rect x="19" y="26" width="1" height="1" />
+                    <rect x="22" y="26" width="2" height="1" />
+                    <rect x="26" y="26" width="1" height="1" />
+                  </svg>
                 </div>
 
-                <button
-                  onClick={handleCopyMockPix}
-                  className="w-full py-1 text-[9px] font-bold rounded-lg bg-[#7be801] hover:bg-[#68c700] text-black flex items-center justify-center gap-1 transition-colors"
-                >
-                  <Copy className="w-2.5 h-2.5" />
-                  Copiar link
-                </button>
-
                 {/* Payment Options Bottom Bar */}
-                <div className="grid grid-cols-2 gap-1 pt-1 border-t border-white/5 text-[8px] text-[#7e8b9b]">
+                <div className="grid grid-cols-2 gap-1 pt-1.5 border-t border-white/5 text-[8px] text-[#7e8b9b]">
                   <div className="flex flex-col items-center text-emerald-400 font-semibold">
                     <QrCode className="w-3 h-3" />
                     <span>Pix</span>
